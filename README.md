@@ -11,10 +11,9 @@ ansible-web/
 │   ├── index.html.j2        # HTML template showing server IP
 │   └── nginx-default.j2     # NGINX configuration template
 ├── playbook.yml             # Main deployment playbook
-├── alb-prep.yml            # ALB preparation playbook
 ├── ansible.cfg             # Ansible configuration
+├── index.html              # Static HTML file
 └── README.md               # This file
-
 
 ## Prerequisites
 
@@ -47,11 +46,13 @@ ansible all -m ping
 ansible-playbook playbook.yml
 ```
 
-### Step 4: Prepare for Application Load Balancer
+### Step 4: Set up Application Load Balancer
 
-```bash
-ansible-playbook alb-prep.yml
-```
+Set up ALB through AWS Console:
+1. Create Target Group with your EC2 instances
+2. Create Application Load Balancer
+3. Configure health checks to use `/health` endpoint
+4. Update security groups to allow ALB traffic
 
 ## Features
 
@@ -69,12 +70,16 @@ After running the playbook, verify deployment:
 1. Check website: `http://YOUR_EC2_IP`
 2. Check health endpoint: `http://YOUR_EC2_IP/health`
 
-## Next Steps for ALB Setup
+## Project Completion Status
 
-1. Create Application Load Balancer in AWS Console
-2. Create Target Group with your EC2 instances
-3. Configure health checks to use `/health` endpoint
-4. Update security groups to allow ALB traffic
+✅ **All project objectives completed successfully:**
+
+1. ✅ Launch 2 EC2 instances on AWS (Free Tier)
+2. ✅ Create and deploy HTML page showing server IP address
+3. ✅ Use Ansible to install NGINX and automate deployment
+4. ✅ Set up Application Load Balancer for traffic distribution
+
+**ALB URL:** http://my-first-alb-1239242874.eu-north-1.elb.amazonaws.com
 
 ## Troubleshooting
 
