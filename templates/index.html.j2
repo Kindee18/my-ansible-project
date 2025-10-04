@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindson's Altschool Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .ip-display {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .server-info {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 My Altschool Project</h1>
+        
+        <p>Hi, My name is <span class="highlight">Kindson Nathaniel Egbule</span> and I am studying cloud engineering at Altschool Africa. So far my experience has been wonderful. This is my second semester examination project. This project is supposed to give me experience working with AWS EC2, S3 and Load Balancer.</p>
+        
+        <div class="ip-display">
+            The IP address that displays this content is: <span id="server-ip">{{ public_ip_address }}</span>
+        </div>
+        
+        <div class="server-info">
+            <h3>🖥️ Server Information:</h3>
+            <p><strong>Operating System:</strong> {{ ansible_distribution }} {{ ansible_distribution_version }}</p>
+            <p><strong>Architecture:</strong> {{ ansible_architecture }}</p>
+            <p><strong>Deployment Time:</strong> {{ ansible_date_time.iso8601 }}</p>
+        </div>
+        
+        <div class="server-info">
+            <h3>📋 Project Objectives:</h3>
+            <ul>
+                <li>✅ Launch 2 EC2 instances on AWS (Free Tier)</li>
+                <li>✅ Create and deploy HTML page showing server IP</li>
+                <li>✅ Use Ansible to install NGINX and automate deployment</li>
+                <li>🔄 Set up Application Load Balancer for traffic distribution</li>
+            </ul>
+        </div>
+        
+        <p style="text-align: center; margin-top: 30px; color: #7f8c8d;">
+            <em>Deployed with ❤️ using Ansible automation</em>
+        </p>
+    </div>
+</body>
+</html>
+
+

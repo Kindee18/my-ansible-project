@@ -1,0 +1,87 @@
+---
+- name: Deploy Website on EC2 Instances with NGINX
+  hosts: webservers
+  become: yes
+  gather_facts: yes
+
+  vars:
+    nginx_port: 80
+    website_dir: /var/www/html
+
+  tasks:
+    - name: Get public IP address from external service
+      uri:
+        url: http://ipv4.icanhazip.com
+        method: GET
+        return_content: yes
+        timeout: 10
+      register: public_ip_result
+      failed_when: false
+
+    - name: Set public IP fact
+      set_fact:
+        public_ip_address: "{{ public_ip_result.content | trim | default(inventory_hostname) }}"
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install NGINX
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start and enable NGINX service
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Remove default NGINX site
+      file:
+        path: "{{ website_dir }}/index.nginx-debian.html"
+        state: absent
+
+    - name: Create website directory
+      file:
+        path: "{{ website_dir }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: "0755"
+
+    - name: Deploy HTML template with server IP
+      template:
+        src: index.html.j2
+        dest: "{{ website_dir }}/index.html"
+        owner: www-data
+        group: www-data
+        mode: "0644"
+      notify:
+        - restart nginx
+
+    - name: Configure NGINX default site
+      template:
+        src: nginx-default.j2
+        dest: /etc/nginx/sites-available/default
+        backup: yes
+      notify:
+        - restart nginx
+
+    - name: Test NGINX configuration
+      command: nginx -t
+      changed_when: false
+
+    - name: Open firewall for HTTP traffic (if UFW is enabled)
+      ufw:
+        rule: allow
+        port: "{{ nginx_port }}"
+        proto: tcp
+      ignore_errors: yes
+
+  handlers:
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: restarted

@@ -1,0 +1,45 @@
+---
+- name: Prepare instances for Application Load Balancer
+  hosts: webservers
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - name: Install AWS CLI (if not present)
+      apt:
+        name: awscli
+        state: present
+
+    - name: Ensure NGINX is running and will start on boot
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Configure NGINX for ALB health checks
+      lineinfile:
+        path: /etc/nginx/sites-available/default
+        regexp: '^\s*#?\s*location /health'
+        line: |
+          location /health {
+              access_log off;
+              return 200 "healthy\n";
+              add_header Content-Type text/plain;
+          }
+        backup: yes
+      notify:
+        - restart nginx
+
+    - name: Display instance information for ALB setup
+      debug:
+        msg: |
+          Instance IP: {{ ansible_default_ipv4.address }}
+          Instance ID: {{ ansible_ec2_instance_id | default('Run on EC2 to get instance ID') }}
+          Hostname: {{ ansible_hostname }}
+          Health Check URL: http://{{ ansible_default_ipv4.address }}/health
+
+  handlers:
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: restarted
