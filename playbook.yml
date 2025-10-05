@@ -9,19 +9,6 @@
     website_dir: /var/www/html
 
   tasks:
-    - name: Get public IP address from external service
-      uri:
-        url: http://ipv4.icanhazip.com
-        method: GET
-        return_content: yes
-        timeout: 10
-      register: public_ip_result
-      failed_when: false
-
-    - name: Set public IP fact
-      set_fact:
-        public_ip_address: "{{ public_ip_result.content | trim | default(inventory_hostname) }}"
-
     - name: Update apt cache
       apt:
         update_cache: yes
@@ -51,9 +38,9 @@
         group: www-data
         mode: "0755"
 
-    - name: Deploy HTML template with server IP
-      template:
-        src: index.html.j2
+    - name: Deploy HTML file
+      copy:
+        src: index.html
         dest: "{{ website_dir }}/index.html"
         owner: www-data
         group: www-data
@@ -61,13 +48,19 @@
       notify:
         - restart nginx
 
-    - name: Configure NGINX default site
-      template:
-        src: nginx-default.j2
-        dest: /etc/nginx/sites-available/default
-        backup: yes
-      notify:
-        - restart nginx
+    - name: Replace placeholder with the instance's hardcoded IP
+      shell: |
+        sed -i "s/YOUR_INSTANCE_IP_HERE/{{ ansible_host }}/" {{ website_dir }}/index.html
+      args:
+        executable: /bin/bash
+
+    - name: Create health check endpoint
+      copy:
+        content: "healthy\n"
+        dest: "{{ website_dir }}/health"
+        owner: www-data
+        group: www-data
+        mode: "0644"
 
     - name: Test NGINX configuration
       command: nginx -t

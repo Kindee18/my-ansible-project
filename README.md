@@ -6,14 +6,12 @@ This project automates the deployment of a website on EC2 instances using Ansibl
 
 ansible-web/
 ├── inventory/
-│   └── hosts                 # Ansible inventory file
-├── templates/
-│   ├── index.html.j2        # HTML template showing server IP
-│   └── nginx-default.j2     # NGINX configuration template
-├── playbook.yml             # Main deployment playbook
-├── ansible.cfg             # Ansible configuration
-├── index.html              # Static HTML file
-└── README.md               # This file
+│ └── hosts # Ansible inventory file
+├── playbook.yml # Main deployment playbook
+├── ansible.cfg # Ansible configuration
+├── index.html # Universal HTML file (works on EC2, ALB, and S3)
+├── deploy-to-s3.sh # S3 deployment script
+└── README.md # This file
 
 ## Prerequisites
 
@@ -46,9 +44,24 @@ ansible all -m ping
 ansible-playbook playbook.yml
 ```
 
-### Step 4: Set up Application Load Balancer
+The playbook will:
+
+- Install and configure NGINX on both servers
+- Deploy the universal HTML file that works everywhere
+- Each server will show its own IP address dynamically
+- Create health check endpoint for load balancer
+- Use default NGINX configuration (simple and reliable)
+
+### Step 4: Deploy to S3 (Optional)
+
+```bash
+./deploy-to-s3.sh
+```
+
+### Step 5: Set up Application Load Balancer
 
 Set up ALB through AWS Console:
+
 1. Create Target Group with your EC2 instances
 2. Create Application Load Balancer
 3. Configure health checks to use `/health` endpoint
@@ -57,7 +70,12 @@ Set up ALB through AWS Console:
 ## Features
 
 - ✅ Automated NGINX installation and configuration
-- ✅ Website deployment showing server IP address
+- ✅ Universal HTML file that works on EC2, ALB, and S3
+- ✅ Dynamic IP detection with visual indicators:
+  - 🟢 **Green**: Server-side detected (most accurate)
+  - 🟠 **Orange**: Load balancer IP
+  - 🔵 **Blue**: Client-side detected
+  - 🟣 **Purple**: S3 static website
 - ✅ Health check endpoint for load balancer (`/health`)
 - ✅ Proper file permissions and ownership
 - ✅ Service management (start/enable NGINX)
@@ -79,7 +97,7 @@ After running the playbook, verify deployment:
 3. ✅ Use Ansible to install NGINX and automate deployment
 4. ✅ Set up Application Load Balancer for traffic distribution
 
-**ALB URL:** http://my-first-alb-1239242874.eu-north-1.elb.amazonaws.com
+**ALB URL:** <http://my-first-alb-1239242874.eu-north-1.elb.amazonaws.com>
 
 ## Troubleshooting
 
