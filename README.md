@@ -2,6 +2,10 @@
 
 This project automates the deployment of a website on EC2 instances using Ansible, NGINX, and Application Load Balancer.
 
+## Reference
+
+For a detailed tutorial on this project, check out the Medium article: [Deploy a Website on EC2 Instances with Automation](https://medium.com/@kindsonegbule15/deploy-a-website-on-ec2-instances-with-automation-7235dadbe5e4)
+
 ## Project Structure
 
 my-ansible-project/
