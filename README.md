@@ -75,11 +75,6 @@ Set up ALB through AWS Console:
 
 - ✅ Automated NGINX installation and configuration
 - ✅ Universal HTML file that works on EC2, ALB, and S3
-- ✅ Dynamic IP detection with visual indicators:
-  - 🟢 **Green**: Server-side detected (most accurate)
-  - 🟠 **Orange**: Load balancer IP
-  - 🔵 **Blue**: Client-side detected
-  - 🟣 **Purple**: S3 static website
 - ✅ Health check endpoint for load balancer (`/health`)
 - ✅ Proper file permissions and ownership
 - ✅ Service management (start/enable NGINX)
