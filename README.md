@@ -51,6 +51,13 @@ The playbook will:
 - Create health check endpoint for load balancer
 - Use default NGINX configuration (simple and reliable)
 
+### Step 4: Deploy on S3
+
+- Use AWS console to create an S3 bucket
+- Move the web files to the bucket
+- Configure permission issues
+- Enable static hosting 
+
 ### Step 4: Set up Application Load Balancer
 
 Set up ALB through AWS Console:
