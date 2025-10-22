@@ -4,13 +4,12 @@ This project automates the deployment of a website on EC2 instances using Ansibl
 
 ## Project Structure
 
-ansible-web/
+my-ansible-project/
 ├── inventory/
 │ └── hosts # Ansible inventory file
 ├── playbook.yml # Main deployment playbook
 ├── ansible.cfg # Ansible configuration
 ├── index.html # Universal HTML file (works on EC2, ALB, and S3)
-├── deploy-to-s3.sh # S3 deployment script
 └── README.md # This file
 
 ## Prerequisites
@@ -52,13 +51,7 @@ The playbook will:
 - Create health check endpoint for load balancer
 - Use default NGINX configuration (simple and reliable)
 
-### Step 4: Deploy to S3 (Optional)
-
-```bash
-./deploy-to-s3.sh
-```
-
-### Step 5: Set up Application Load Balancer
+### Step 4: Set up Application Load Balancer
 
 Set up ALB through AWS Console:
 
